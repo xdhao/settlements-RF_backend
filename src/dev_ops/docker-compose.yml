@@ -1,0 +1,156 @@
+version: "3.4"
+services:
+
+#  connector_mk:
+#    container_name: connector_mk
+#    hostname: connector_mk
+#    restart: always
+#    build:
+#      context: ..
+#      dockerfile: ./modules/sensor_services/connector_to_mk/Dockerfile
+#    networks:
+#      - global
+#    env_file:
+#      - ${ENV_FILE}
+
+  meterpoints_services:
+    container_name: meterpoints_services
+    hostname: meterpoints_services
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/meterpoints_services/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  user_management_service:
+    container_name: user_management_service
+    hostname: user_management_service
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/user_services/user_management_service/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  role_service:
+    container_name: role_service
+    hostname: role_service
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/user_services/role_service/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  notification_service:
+    container_name: notification_service
+    hostname: notification_service
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/notifications_services/notification_service/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  noti_websocket:
+    container_name: noti_websocket
+    hostname: noti_websocket
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/notifications_services/noti_websocket/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  nsi_service:
+    container_name: nsi_service
+    hostname: nsi_service
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/nsi_services/nsi_service/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+    volumes:
+      - /home/bilab/asmd_data:/app/data
+
+  nsi_websocket:
+    container_name: nsi_websocket
+    hostname: nsi_websocket
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/nsi_services/nsi_websocket/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  general_service:
+    container_name: general_service
+    hostname: general_service
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/general_service/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  reporting_subsystem:
+    container_name: reporting_subsystem
+    hostname: reporting_subsystem
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/reporting_subsystem/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+    volumes:
+      - /home/bilab/asmd_data:/app/data
+
+  sap_service:
+    container_name: sap_service
+    hostname: sap_service
+    restart: always
+    build:
+      context: ..
+      dockerfile: ./modules/integration_services/sap_service/Dockerfile
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+  nginx:
+    container_name: asmd-nginx-api
+    hostname: asmd-nginx-api
+    image: nginx
+    restart: unless-stopped
+    ports:
+      - "4110:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - global
+    env_file:
+      - ${ENV_FILE}
+
+networks:
+  global:
+    external: true
