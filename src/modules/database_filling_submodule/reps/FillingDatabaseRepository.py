@@ -6,7 +6,7 @@ from core.core_websoursces.models import City
 from core.core_websoursces.models.District import District
 from core.core_websoursces.models.LastAppealDate import LastAppealDate
 from core.core_websoursces.models.Region import Region
-from modules.fias_api_and_wikidata_module.settlements_data_requestor import SettlementsDataRequestor
+from modules.fias_api_and_wikidata_module.scripts.settlements_data_requestor import SettlementsDataRequestor
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

@@ -4,7 +4,7 @@ import requests
 import sys
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-from modules.fias_api_and_wikidata_module.schemas.BasicSettlementsObjects import Region, City, District
+from modules.fias_api_and_wikidata_module.schemas.BasicSettlementsObjects import Region, CityView, District
 
 
 def get_ru_alphabet():
@@ -15,7 +15,7 @@ def get_ru_alphabet():
 class SettlementsDataRequestor:
     regions: List[Region]
     districts = List[District]
-    cities = List[City]
+    cities = List[CityView]
 
     def __init__(self):
         self.wikidata_url = "https://query.wikidata.org/sparql"  # ссылка на wikidata
@@ -103,8 +103,8 @@ class SettlementsDataRequestor:
                                 area = float(result['place_area']['value'])
                             if 'place_pop' in result and 'value' in result['place_pop']:
                                 people = result['place_pop']['value']
-                    y = City(id=x['id'], region_id=region.id, name=x['name'], type=x['type'],
-                             head=head, area=area, people=people)
+                    y = CityView(id=x['id'], region_id=region.id, name=x['name'], type=x['type'],
+                                 head=head, area=area, people=people)
                     res.append(y)
         for district in districts:
             url = f'https://kladr-api.ru/api.php?contentType=city&districtId={district.id}&limit=1'

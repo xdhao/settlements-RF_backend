@@ -1,8 +1,9 @@
+from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
 
 
-class City(BaseModel):
+class CityView(BaseModel):
     id: int
     region_id: Optional[int] = None
     district_id: Optional[int] = None
@@ -33,3 +34,26 @@ class Region(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class DistrictView(District):
+    cities: Optional[List[CityView]]
+
+    @staticmethod
+    def from_model(model, cities):
+        return DistrictView(cities=list(filter(lambda x: x.region_id == model.id, cities)), **model.dict())
+
+
+class RegionView(Region):
+    districts: Optional[List[DistrictView]]
+    cities: Optional[List[CityView]]
+
+    @staticmethod
+    def from_model(model, cities, districts):
+        return RegionView(cities=list(filter(lambda x: x.region_id == model.id, cities)),
+                          districts=list(filter(lambda x: x.region_id == model.id, districts)),
+                          **model.dict())
+
+
+class LatestDateView(BaseModel):
+    date: datetime

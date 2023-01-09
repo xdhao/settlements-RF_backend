@@ -9,13 +9,13 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 from core.core_xlsx_parser.database.database import SQLALCHEMY_DATABASE_URL_ASYNC, Base
+from core.core_xlsx_parser.models.AutonomicDistrict import AutonomicDistrict
 from core.core_xlsx_parser.models.Country import Country
 from core.core_xlsx_parser.models.Region import Region
 from core.core_xlsx_parser.models.FederalDistrict import FederalDistrict
 from core.core_xlsx_parser.models.LocalSubject import LocalSubject
 from core.core_xlsx_parser.models.People import People
 from core.core_xlsx_parser.models.Population import Population
-
 
 
 config = context.config
@@ -30,7 +30,7 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # target_metadata = [Country.metadata, Region.metadata, FederalDistrict.metadata, LocalSubject.metadata,
-#                    People.metadata, Population.metadata]
+#                     People.metadata, Population.metadata, AutonomicDistrict.metadata]
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
