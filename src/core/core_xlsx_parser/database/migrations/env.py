@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from core.core_xlsx_parser.database.database import SQLALCHEMY_DATABASE_URL_ASYNC, Base
 from core.core_xlsx_parser.models.AutonomicDistrict import AutonomicDistrict
 from core.core_xlsx_parser.models.Country import Country
-from core.core_xlsx_parser.models.Region import Region
+from core.core_xlsx_parser.models.SomeRegion import SomeRegion
 from core.core_xlsx_parser.models.FederalDistrict import FederalDistrict
 from core.core_xlsx_parser.models.LocalSubject import LocalSubject
 from core.core_xlsx_parser.models.People import People

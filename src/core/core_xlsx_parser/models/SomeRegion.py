@@ -7,7 +7,7 @@ from core.core_xlsx_parser.models.FederalDistrict import FederalDistrict
 from core.core_xlsx_parser.models.Population import Population
 
 
-class Region(Base, table=True):
+class SomeRegion(Base, table=True):
     name: str
     district_guid: uuid.UUID = Field(foreign_key=FederalDistrict.__pk__, nullable=True)
     population: uuid.UUID = Field(foreign_key=Population.__pk__, nullable=True)
