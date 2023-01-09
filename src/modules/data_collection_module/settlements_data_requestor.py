@@ -55,14 +55,17 @@ class SettlementsDataRequestor:
         """
         arr = get_ru_alphabet()
         res = list()
-        for a in arr:
-            url = 'https://kladr-api.ru/api.php?query=' + a + '&contentType=region'
-            data = requests.get(url)
-            data = data.json()
-            for x in data['result']:
-                if x['name'] != 'Бесплатная версия kladr-api.ru':
-                    y = Region(name=x['name'], id=x['id'], type=x['type'])
-                    res.append(y)
+        # for a in arr:
+        url = 'https://kladr-api.ru/api.php?query=Арх&contentType=region&limit=1'
+        data = requests.get(url)
+        data = data.json()
+        for x in data['result']:
+            if x['name'] != 'Бесплатная версия kladr-api.ru':
+                name = x['name']
+                if x['type'] == 'Область':
+                    name = x['name'] + ' область'
+                y = Region(name=name, id=x['id'], type=x['type'])
+                res.append(y)
         return res
 
     def get_districts(self, parents):
@@ -72,12 +75,12 @@ class SettlementsDataRequestor:
         """
         res = list()
         for parent in parents:
-            url = f'https://kladr-api.ru/api.php?contentType=district&regionId={parent.id}'
+            url = f'https://kladr-api.ru/api.php?contentType=district&regionId={parent.id}&limit=1'
             data = requests.get(url)
             data = data.json()
             for x in data['result']:
                 if x['name'] != 'Бесплатная версия kladr-api.ru':
-                    y = District(id=x['id'], parent_id=parent.id, name=x['name'], type=x['type'])
+                    y = District(id=x['id'], region_id=parent.id, name=x['name'], type=x['type'])
                     res.append(y)
         return res
 
@@ -85,7 +88,7 @@ class SettlementsDataRequestor:
 
         res = list()
         for region in regions:
-            url = f'https://kladr-api.ru/api.php?contentType=city&regionId={region.id}'
+            url = f'https://kladr-api.ru/api.php?contentType=city&regionId={region.id}&limit=1'
             data = requests.get(url)
             data = data.json()
             for x in data['result']:
@@ -104,7 +107,7 @@ class SettlementsDataRequestor:
                              head=head, area=area, people=people)
                     res.append(y)
         for district in districts:
-            url = f'https://kladr-api.ru/api.php?contentType=city&districtId={district.id}'
+            url = f'https://kladr-api.ru/api.php?contentType=city&districtId={district.id}&limit=1'
             data = requests.get(url)
             data = data.json()
             for x in data['result']:

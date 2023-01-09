@@ -12,19 +12,24 @@ class City(BaseModel):
     head: Optional[str] = None
     type: str
 
+    class Config:
+        orm_mode = True
+
 
 class District(BaseModel):
     id: int
     region_id: Optional[int] = None
     name: str
-    cities: Optional[List[City]]
     type: str
+
+    class Config:
+        orm_mode = True
 
 
 class Region(BaseModel):
     id: int
     name: str
-    districts: Optional[List[District]]
-    cities: Optional[List[City]]
     type: str
 
+    class Config:
+        orm_mode = True

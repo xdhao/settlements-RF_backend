@@ -2,10 +2,10 @@ from datetime import datetime
 
 from sqlalchemy import select
 import pytz
-from core.models import City
+from core.models.City import City
 from core.models.District import District
-from core.models import LastAppealDate
-from core.models import Region
+from core.models.LastAppealDate import LastAppealDate
+from core.models.Region import Region
 from modules.data_collection_module.settlements_data_requestor import SettlementsDataRequestor
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,7 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 class FillingDatabaseRepository:
     def __init__(self, connection: AsyncSession):
         self.connection = connection
-        self.DataClass = SettlementsDataRequestor
+        self.DataClass = SettlementsDataRequestor()
 
     async def fill_database(self):
 
@@ -33,9 +33,9 @@ class FillingDatabaseRepository:
         appended_cities = list(filter(lambda x: x.id not in cit_ids, self.DataClass.cities))
 
         # ДОБАВЛЯЕМ НОВЫЕ ДАННЫЕ В БД
-        self.connection.add_all(appended_regions)
-        self.connection.add_all(appended_districts)
-        self.connection.add_all(appended_cities)
+        self.connection.add_all([Region(**x.dict()) for x in appended_regions])
+        self.connection.add_all([District(**x.dict()) for x in appended_districts])
+        self.connection.add_all([City(**x.dict()) for x in appended_cities])
 
         # обновляем дату последнего обращения
         appeal_date = (await self.connection.execute(select(LastAppealDate))).scalars().first()
