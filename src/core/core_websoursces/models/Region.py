@@ -1,8 +1,7 @@
 from sqlalchemy import BigInteger
 
-from core.database.database import Base
-from sqlmodel import Field, SQLModel, Relationship
-from sqlmodel import SQLModel, Field, Column, DateTime
+from core.core_websoursces.database.database import Base
+from sqlmodel import Field, Column
 
 
 class Region(Base, table=True):

@@ -44,16 +44,6 @@ class Base(IBase):
         """Первичный ключ таблицы."""
         return f'{cls.__tablename__}.{cls.guid.__dict__["key"]}'
 
-    def dict_by_update(self):
-        dict_ = copy(self.dict())
-        del dict_['guid']
-        del dict_['created_at']
-        return dict_
-
-    def update(self, field: Dict[str, Any]):
-        for k, v in field.items():
-            setattr(self, k, v)
-
 
 async_session = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False

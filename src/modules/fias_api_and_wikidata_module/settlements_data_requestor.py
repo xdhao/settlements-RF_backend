@@ -4,7 +4,7 @@ import requests
 import sys
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-from modules.data_collection_module.schemas.BasicSettlementsObjects import Region, City, District
+from modules.fias_api_and_wikidata_module.schemas.BasicSettlementsObjects import Region, City, District
 
 
 def get_ru_alphabet():
