@@ -9,7 +9,7 @@ class People(Base, table=True):
     all: int = Field(nullable=True, sa_column=Column(BigInteger()))
     man: int = Field(nullable=True, sa_column=Column(BigInteger()))
     woman: int = Field(nullable=True, sa_column=Column(BigInteger()))
-    man_perc: float
-    woman_perc: float
+    man_perc: float = Field(nullable=True)
+    woman_perc: float = Field(nullable=True)
 
 
