@@ -2,6 +2,7 @@ import uuid
 from copy import copy
 from datetime import datetime, timezone, timedelta
 from typing import Any, Dict
+import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -11,7 +12,15 @@ from sqlalchemy.pool import NullPool
 
 from core.scripts.case import snake_case
 
-SQLALCHEMY_DATABASE_URL_ASYNC = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/settlements_xlsx_db"
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+
+if DB_HOST and DB_PASSWORD and DB_PORT:
+    SQLALCHEMY_DATABASE_URL_ASYNC = f"postgresql+asyncpg://postgres:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/settlements_xlsx_db"
+else:
+    SQLALCHEMY_DATABASE_URL_ASYNC = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/settlements_xlsx_db"
+
 SQLALCHEMY_DATABASE_URL_SYNC = "postgresql://postgres:1234@127.0.0.1:5432/settlements_xlsx_db"
 
 engine = create_async_engine(SQLALCHEMY_DATABASE_URL_ASYNC, echo=True, future=True, poolclass=NullPool)

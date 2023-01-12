@@ -1,145 +1,41 @@
 version: "3.4"
 services:
-
-#  connector_mk:
-#    container_name: connector_mk
-#    hostname: connector_mk
-#    restart: always
-#    build:
-#      context: ..
-#      dockerfile: ./modules/sensor_services/connector_to_mk/Dockerfile
-#    networks:
-#      - global
-#    env_file:
-#      - ${ENV_FILE}
-
-  meterpoints_services:
-    container_name: meterpoints_services
-    hostname: meterpoints_services
+  database_filling_submodule:
+    container_name: database_filling_submodule
+    hostname: database_filling_submodule
     restart: always
     build:
       context: ..
-      dockerfile: ./modules/meterpoints_services/Dockerfile
+      dockerfile: ./modules/database_filling_submodule/Dockerfile
     networks:
       - global
     env_file:
       - ${ENV_FILE}
-
-  user_management_service:
-    container_name: user_management_service
-    hostname: user_management_service
+  excel_data_module:
+    container_name: excel_data_module
+    hostname: excel_data_module
     restart: always
     build:
       context: ..
-      dockerfile: ./modules/user_services/user_management_service/Dockerfile
+      dockerfile: ./modules/excel_data_module/Dockerfile
     networks:
       - global
     env_file:
       - ${ENV_FILE}
-
-  role_service:
-    container_name: role_service
-    hostname: role_service
+  fias_api_and_wikidata_module:
+    container_name: fias_api_and_wikidata_module
+    hostname: fias_api_and_wikidata_module
     restart: always
     build:
       context: ..
-      dockerfile: ./modules/user_services/role_service/Dockerfile
+      dockerfile: ./modules/fias_api_and_wikidata_module/Dockerfile
     networks:
       - global
     env_file:
       - ${ENV_FILE}
-
-  notification_service:
-    container_name: notification_service
-    hostname: notification_service
-    restart: always
-    build:
-      context: ..
-      dockerfile: ./modules/notifications_services/notification_service/Dockerfile
-    networks:
-      - global
-    env_file:
-      - ${ENV_FILE}
-
-  noti_websocket:
-    container_name: noti_websocket
-    hostname: noti_websocket
-    restart: always
-    build:
-      context: ..
-      dockerfile: ./modules/notifications_services/noti_websocket/Dockerfile
-    networks:
-      - global
-    env_file:
-      - ${ENV_FILE}
-
-  nsi_service:
-    container_name: nsi_service
-    hostname: nsi_service
-    restart: always
-    build:
-      context: ..
-      dockerfile: ./modules/nsi_services/nsi_service/Dockerfile
-    networks:
-      - global
-    env_file:
-      - ${ENV_FILE}
-    volumes:
-      - /home/bilab/asmd_data:/app/data
-
-  nsi_websocket:
-    container_name: nsi_websocket
-    hostname: nsi_websocket
-    restart: always
-    build:
-      context: ..
-      dockerfile: ./modules/nsi_services/nsi_websocket/Dockerfile
-    networks:
-      - global
-    env_file:
-      - ${ENV_FILE}
-
-  general_service:
-    container_name: general_service
-    hostname: general_service
-    restart: always
-    build:
-      context: ..
-      dockerfile: ./modules/general_service/Dockerfile
-    networks:
-      - global
-    env_file:
-      - ${ENV_FILE}
-
-  reporting_subsystem:
-    container_name: reporting_subsystem
-    hostname: reporting_subsystem
-    restart: always
-    build:
-      context: ..
-      dockerfile: ./modules/reporting_subsystem/Dockerfile
-    networks:
-      - global
-    env_file:
-      - ${ENV_FILE}
-    volumes:
-      - /home/bilab/asmd_data:/app/data
-
-  sap_service:
-    container_name: sap_service
-    hostname: sap_service
-    restart: always
-    build:
-      context: ..
-      dockerfile: ./modules/integration_services/sap_service/Dockerfile
-    networks:
-      - global
-    env_file:
-      - ${ENV_FILE}
-
   nginx:
-    container_name: asmd-nginx-api
-    hostname: asmd-nginx-api
+    container_name: settlements-rf
+    hostname: settlements-rf
     image: nginx
     restart: unless-stopped
     ports:
@@ -150,7 +46,6 @@ services:
       - global
     env_file:
       - ${ENV_FILE}
-
 networks:
   global:
     external: true
