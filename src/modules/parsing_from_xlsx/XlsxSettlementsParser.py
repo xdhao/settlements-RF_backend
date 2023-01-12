@@ -158,14 +158,15 @@ class XlsxSettlementsParser:
     def create_regions(self, federals):
         res = []
         for idx, x in enumerate(self.dataframe['Объект'].tolist()):
-            if 'область' in x or 'Республика' in x:
-                sliced_frame = self.dataframe['Объект'].tolist()[:idx]
-                i = len(sliced_frame) - 1
-                while i > 0 and 'федеральный округ' not in sliced_frame[i]:
-                    i -= 1
-                fed = sliced_frame[i]
-                fed_guid = list(filter(lambda z: z.name == fed, federals))[0].guid
-                res.append(Region(name=x, district_guid=fed_guid, population=self.define_pop(idx).guid))
+            if 'без' not in x:
+                if 'область' in x or 'Республика' in x:
+                    sliced_frame = self.dataframe['Объект'].tolist()[:idx]
+                    i = len(sliced_frame) - 1
+                    while i > 0 and 'федеральный округ' not in sliced_frame[i]:
+                        i -= 1
+                    fed = sliced_frame[i]
+                    fed_guid = list(filter(lambda z: z.name == fed, federals))[0].guid
+                    res.append(Region(name=x, district_guid=fed_guid, population=self.define_pop(idx).guid))
         return res
 
     def create_auto_dists(self, regions):
@@ -193,21 +194,31 @@ class XlsxSettlementsParser:
         self.peoples.append(population)
         sliced_frame = self.dataframe['Объект'].tolist()[:index]
         i = len(sliced_frame) - 1
-        while i > 0 and 'область' not in sliced_frame[i]:
+        while i > 0 and ('область' not in sliced_frame[i] or 'без ' in sliced_frame[i]) \
+                    and ('Республика' not in sliced_frame[i] or 'без ' in sliced_frame[i]):
             i -= 1
         region = sliced_frame[i]
+        print(region)
         reg_guid = list(filter(lambda z: z.name == region, regions))[0].guid
-        return City(name=obj.partition(separator)[2], type=type, people=population.guid, region_guid=reg_guid)
+        name = obj
+        if separator:
+            name = obj.partition(separator)[2]
+        return City(name=name, type=type, people=population.guid, region_guid=reg_guid)
 
     def parse_local_objects(self, regions):
         res = []
         for idx, x in enumerate(self.dataframe['Объект'].tolist()):
-            if 'г. ' in x:
-                res.append(self.create_local_object(x, idx, 'город', 'г. ', regions))
-            if '- пгт ' in x:
-                res.append(self.create_local_object(x, idx, 'поселок городского типа', '- пгт ', regions))
-            if 'п. ' in x:
-                res.append(self.create_local_object(x, idx, 'поселок', 'п. ', regions))
-            if 'село ' in x:
-                res.append(self.create_local_object(x, idx, 'село', 'село ', regions))
+            if 'население' not in x:
+                if 'г. ' in x:
+                    res.append(self.create_local_object(x, idx, 'город', 'г. ', regions))
+                if '- пгт ' in x:
+                    res.append(self.create_local_object(x, idx, 'поселок городского типа', '- пгт ', regions))
+                if 'п. ' in x:
+                    res.append(self.create_local_object(x, idx, 'поселок', 'п. ', regions))
+                if 'поселок' in x and 'п. ' not in x:
+                    res.append(self.create_local_object(x, idx, 'поселок', 'поселок ', regions))
+                if 'село ' in x:
+                    res.append(self.create_local_object(x, idx, 'село', 'село ', regions))
+                if 'Сельское поселение' in x and 'село ' not in x:
+                    res.append(self.create_local_object(x, idx, 'село', None, regions))
         return res
