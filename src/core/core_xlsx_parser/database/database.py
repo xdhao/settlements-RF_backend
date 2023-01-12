@@ -7,13 +7,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlmodel import SQLModel, Field, Column, DateTime
 from sqlalchemy.orm import sessionmaker, declared_attr, Session
+from sqlalchemy.pool import NullPool
 
 from core.scripts.case import snake_case
 
 SQLALCHEMY_DATABASE_URL_ASYNC = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/settlements_xlsx_db"
 SQLALCHEMY_DATABASE_URL_SYNC = "postgresql://postgres:1234@127.0.0.1:5432/settlements_xlsx_db"
 
-engine = create_async_engine(SQLALCHEMY_DATABASE_URL_ASYNC, echo=True, future=True)
+engine = create_async_engine(SQLALCHEMY_DATABASE_URL_ASYNC, echo=True, future=True, poolclass=NullPool)
 engine_sync = create_engine(SQLALCHEMY_DATABASE_URL_SYNC, echo=True)
 
 
