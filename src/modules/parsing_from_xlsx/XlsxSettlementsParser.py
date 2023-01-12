@@ -208,17 +208,21 @@ class XlsxSettlementsParser:
     def parse_local_objects(self, regions):
         res = []
         for idx, x in enumerate(self.dataframe['Объект'].tolist()):
-            if 'население' not in x:
-                if 'г. ' in x:
-                    res.append(self.create_local_object(x, idx, 'город', 'г. ', regions))
-                if '- пгт ' in x:
-                    res.append(self.create_local_object(x, idx, 'поселок городского типа', '- пгт ', regions))
-                if 'п. ' in x:
-                    res.append(self.create_local_object(x, idx, 'поселок', 'п. ', regions))
-                if 'поселок' in x and 'п. ' not in x:
-                    res.append(self.create_local_object(x, idx, 'поселок', 'поселок ', regions))
-                if 'село ' in x:
-                    res.append(self.create_local_object(x, idx, 'село', 'село ', regions))
-                if 'Сельское поселение' in x and 'село ' not in x:
-                    res.append(self.create_local_object(x, idx, 'село', None, regions))
+            if 'г. ' in x:
+                res.append(self.create_local_object(x, idx, 'город', 'г. ', regions))
+            elif 'пгт ' in x:
+                res.append(self.create_local_object(x, idx, 'поселок городского типа', 'пгт ', regions))
+            elif 'п. ' in x:
+                res.append(self.create_local_object(x, idx, 'поселок', 'п. ', regions))
+            elif 'поселок' in x and 'п. ' not in x:
+                res.append(self.create_local_object(x, idx, 'поселок', 'поселок ', regions))
+            elif 'село ' in x:
+                res.append(self.create_local_object(x, idx, 'село', 'село ', regions))
+            elif 'Сельское поселение' in x and 'село ' not in x:
+                res.append(self.create_local_object(x, idx, 'село', None, regions))
+            elif ('население' in x and ('г. ' in x or 'пгт ' in x or 'п. ' in x or 'поселок' in x or
+                                       'село ' in x or 'Сельское поселение' in x or 'город' in x)) \
+                    or ('округ' in x and 'федеральный' not in x):
+                res.append(self.create_local_object(x, idx, 'прочее', None, regions))
+
         return res

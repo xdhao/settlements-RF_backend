@@ -8,7 +8,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from core.core_xlsx_parser.database.database import get_session
 from modules.excel_data_module.reps.ExcelDataRep import ExcelDataRepository
 from modules.excel_data_module.schemas.view_models import CountryView, federal_DistrictView, SomeRegionView, AutDisView, \
-    LocalObjectsSummary
+    LocalObjectsSummary, TypeMediumValueView, MediumPercMan, MediumRuralUrban
 from starlette.responses import FileResponse
 
 
@@ -39,6 +39,18 @@ class ExcelDataRouter(Routable):
     @get("get-local-objects/{id}", response_model=LocalObjectsSummary)
     async def get_local_objects(self, id: uuid.UUID):
         return await self.repository.get_local_objects(id)
+
+    @get("get-medium-value-of-subject-types", response_model=TypeMediumValueView)
+    async def get_medium_types_value(self):
+        return await self.repository.get_types_medium_value()
+
+    @get("get-medium-people-perc", response_model=MediumPercMan)
+    async def get_medium_people(self):
+        return await self.repository.get_medium_people_perc()
+
+    @get("get-perc-urbal-rural", response_model=MediumRuralUrban)
+    async def get_urban_rural(self):
+        return await self.repository.get_perc_rural_urban()
 
 
 router = APIRouter()

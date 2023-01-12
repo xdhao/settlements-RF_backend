@@ -68,11 +68,27 @@ class LocalObjView(BaseModel):
 
 
 class LocalObjectsSummary(BaseModel):
-    sum_woman: Optional[int]
-    sum_man: Optional[int]
-    sum_all: Optional[int]
     count_city: Optional[int]
     count_pgt: Optional[int]
     count_p: Optional[int]
     count_selo: Optional[int]
     objects: Optional[List[LocalObjView]]
+
+
+class TypeMediumValueView(BaseModel):
+    medium_city: Optional[int]
+    medium_pgt: Optional[int]
+    medium_p: Optional[int]
+    medium_selo: Optional[int]
+
+
+class MediumPercMan(BaseModel):
+    medium_ur_man: Optional[float]
+    medium_ur_woman: Optional[float]
+    medium_ru_man: Optional[float]
+    medium_ru_woman: Optional[float]
+
+
+class MediumRuralUrban(BaseModel):
+    medium_urban: Optional[float]
+    medium_rural: Optional[float]
